@@ -10,6 +10,7 @@ import { PREVIEW_IMAGES } from '../data/preview';
 import { decodePool } from '../lib/poolCodec';
 import { PoolSchema, type ImageSource } from '../types/dataset';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { ScrollProgress } from '../components/layout/ScrollProgress';
 
 type Row = Pick<ImageSource, 'title' | 'pageUrl' | 'author' | 'license' | 'licenseUrl'>;
 
@@ -42,6 +43,7 @@ export function CreditsPage() {
 
   return (
     <div className="flex min-h-dvh flex-col">
+      <ScrollProgress />
       <SiteHeader />
       <PageContainer className="flex-1 py-10 sm:py-14">
         <div className="max-w-3xl">

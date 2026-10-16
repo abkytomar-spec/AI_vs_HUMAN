@@ -76,6 +76,55 @@
   }
 }
 
+/*
+  Scroll reveals. An element carries data-reveal="out" until it first scrolls
+  into view, then flips to "in". Only opacity and transform animate, so a
+  reveal never affects layout. Nothing is ever display:none or
+  visibility:hidden, so revealed content stays in the accessibility tree and
+  findable by in-page search even before it animates.
+*/
+[data-reveal] {
+  transition:
+    opacity 700ms var(--ease-out-quart),
+    transform 700ms var(--ease-out-quart);
+}
+
+[data-reveal='out'] {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+}
+
+[data-reveal='in'] {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+  Difficulty meters grow up from the baseline as their row arrives, so the
+  escalation from one bar to four reads as movement rather than decoration.
+  Scoped to reveals, which leaves the same badge static inside the game header.
+*/
+[data-reveal] .difficulty-bar {
+  transform-origin: bottom;
+  transition:
+    transform 420ms var(--ease-out-quart),
+    opacity 420ms var(--ease-out-quart);
+}
+
+[data-reveal='out'] .difficulty-bar {
+  opacity: 0.3;
+  transform: scaleY(0.2);
+}
+
+/* Belt and braces: never leave content hidden when motion is turned down. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal='out'],
+  [data-reveal='out'] .difficulty-bar {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes frame-in {
   from {
     opacity: 0;

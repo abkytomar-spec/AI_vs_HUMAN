@@ -67,7 +67,11 @@ export function DifficultyBadge({ difficulty }: { difficulty: Difficulty }) {
     <span className="inline-flex items-center gap-1.5 text-[13px] whitespace-nowrap text-ink-2">
       <span aria-hidden className="flex gap-0.5">
         {[1, 2, 3, 4].map((n) => (
-          <span key={n} className={cn('h-2.5 w-1 rounded-full', n <= level ? 'bg-ink' : 'bg-line-strong')} />
+          <span
+            key={n}
+            className={cn('difficulty-bar h-2.5 w-1 rounded-full', n <= level ? 'bg-ink' : 'bg-line-strong')}
+            style={{ transitionDelay: `${140 + n * 60}ms` }}
+          />
         ))}
       </span>
       {DIFFICULTY_LABEL[difficulty]}
