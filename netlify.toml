@@ -1,0 +1,27 @@
+# Netlify build config for Real or Rendered.
+# BASE_PATH is left unset so Vite builds for the site root (Netlify serves at /),
+# unlike the GitHub Pages build which needs /AI_vs_HUMAN/.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Single-page app: every path falls back to index.html with a real 200,
+# so deep links like /play and /credits work on a hard refresh.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
