@@ -1,0 +1,10 @@
+{
+  "tasks": [
+    { "name": "ai-subcats", "type": "subcats", "root": "Category:AI-generated images", "depth": 2 },
+    { "name": "ai-search-photoreal", "type": "search", "query": "photorealistic AI-generated", "limit": 50, "minWidth": 768 },
+    { "name": "ai-search-sd-photo", "type": "search", "query": "\"Stable Diffusion\" photograph realistic", "limit": 50, "minWidth": 768 },
+    { "name": "ai-search-midjourney", "type": "search", "query": "Midjourney photorealistic", "limit": 25, "minWidth": 768 },
+    { "name": "ai-search-dalle", "type": "search", "query": "\"DALL-E 3\" realistic photo", "limit": 25, "minWidth": 768 },
+    { "name": "ai-search-flux", "type": "search", "query": "\"FLUX.1\" generated image", "limit": 25, "minWidth": 768 }
+  ]
+}
