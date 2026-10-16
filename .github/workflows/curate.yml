@@ -1,0 +1,38 @@
+name: Curate images (Wikimedia Commons)
+
+# Runs scripts/commons/job.json against the Wikimedia Commons API and publishes the
+# results (metadata, contact sheets, normalized images) to the `ci/curate-out` branch
+# for manual review. Not part of the app build.
+on:
+  push:
+    branches: [main]
+    paths: [scripts/commons/job.json, .github/workflows/curate.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: curate
+  cancel-in-progress: false
+
+jobs:
+  curate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: npm install --no-save --no-package-lock sharp@0.34.4
+      - run: node scripts/commons/run-job.mjs
+      - name: Publish results to ci/curate-out
+        run: |
+          cd curation-out
+          git init -q -b ci/curate-out
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Curation output for ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" ci/curate-out

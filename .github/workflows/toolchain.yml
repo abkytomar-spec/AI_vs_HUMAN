@@ -1,0 +1,39 @@
+name: Toolchain snapshot
+
+# Builds a Linux x64 node_modules snapshot and package-lock.json, and publishes them
+# to the `ci/toolchain-out` branch. Only used to develop inside sandboxes that cannot
+# reach the npm registry directly. Not part of the app.
+on:
+  push:
+    branches: [main]
+    paths: [package.json, .github/workflows/toolchain.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - name: Pack node_modules
+        run: |
+          mkdir -p out
+          cp package-lock.json out/
+          tar czf - node_modules | split -b 45m - out/node_modules.tgz.part-
+          ls -lh out
+      - name: Publish to ci/toolchain-out
+        run: |
+          cd out
+          git init -q -b ci/toolchain-out
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Toolchain snapshot for ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" ci/toolchain-out
