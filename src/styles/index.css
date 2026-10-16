@@ -1,0 +1,88 @@
+@import 'tailwindcss';
+
+/*
+  Design tokens. Light theme is the product's primary (and only) experience.
+  Spacing follows Tailwind's 4px scale; radii are deliberately small so the
+  photographs, not the containers, carry the visual weight.
+*/
+@theme {
+  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --color-canvas: #f7f7f4;
+  --color-surface: #ffffff;
+  --color-ink: #171717;
+  --color-ink-2: #5c5c5c; /* secondary text: 6.3:1 on canvas */
+  --color-ink-3: #767676; /* tertiary text: 4.5:1 on white, use sparingly */
+  --color-line: #e7e7e2;
+  --color-line-strong: #d4d4cd;
+  --color-accent: #365cf5;
+  --color-accent-ink: #2443c9;
+  --color-accent-wash: #eef1fe;
+  --color-success: #1d7a4c;
+  --color-success-wash: #e8f4ed;
+  --color-danger: #b93a2b;
+  --color-danger-wash: #fbecea;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-canvas text-ink antialiased;
+    font-family: var(--font-sans);
+    font-feature-settings: 'ss01', 'cv11';
+    min-height: 100dvh;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-accent-wash);
+  }
+
+  /* Native dialog backdrop used by the image inspector. */
+  dialog::backdrop {
+    background: rgb(23 23 23 / 0.86);
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes frame-in {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
